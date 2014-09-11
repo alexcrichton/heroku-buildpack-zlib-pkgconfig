@@ -1,0 +1,27 @@
+#!/bin/bash
+# usage: bin/compile <build-dir> <cache-dir>
+
+set -xeo pipefail
+
+mkdir -p "$1" "$2"
+cache=/tmp/codon/vendor
+
+mkdir -p "$cache/lib/pkgconfig"
+cat > "$cache/lib/pkgconfig/zlib.pc" <<'endmsg'
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+sharedlibdir=${libdir}
+includedir=${prefix}/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.8
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
+endmsg
+
+echo $cache
+cat "$cache/lib/pkgconfig/zlib.pc"
